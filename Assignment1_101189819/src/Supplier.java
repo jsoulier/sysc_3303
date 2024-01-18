@@ -44,7 +44,7 @@ public class Supplier extends Thread {
      * @param ingredient The ingredient supplied from the barista.
      * @return False if the barista should stop.
      */
-    public synchronized boolean get(Ingredient ingredient) {
+    public synchronized boolean getIngredients(Ingredient ingredient) {
 
         // Loop while there are no ingredients and the maximum number of cups has
         // not been reached
@@ -96,7 +96,7 @@ public class Supplier extends Thread {
      * and acquiring the first two ingredients. Uniqueness is guaranteed between
      * ingredients.
      */
-    public synchronized void put() {
+    public synchronized void putIngredients() {
 
         // Loop while there are ingredients
         while (!empty) {
@@ -133,7 +133,7 @@ public class Supplier extends Thread {
     @Override
     public void run() {
         while (cups < maxCups - 1) {
-            put();
+            putIngredients();
         }
     }
 }

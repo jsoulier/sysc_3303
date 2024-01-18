@@ -29,6 +29,6 @@ public class Barista extends Thread {
      */
     @Override
     public void run() {
-        while (supplier.get(ingredient)) {}
+        while (supplier.getIngredients(ingredient)) {}
     }
 }
