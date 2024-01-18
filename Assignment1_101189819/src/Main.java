@@ -9,16 +9,8 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        // Create the shared supplier
-        Supplier supplier = new Supplier(20);
-
-        // Create the different baristas using the shared supplier
-        for (Ingredient ingredient : Ingredient.values()) {
-            Barista barista = new Barista(supplier, ingredient);
-            barista.start();
-        }
-
-        // Start the shared supplier to also start the baristas
-        supplier.start();
+        // Initialize counter, baristas, and supplier
+        Counter counter = new Counter(20);
+        counter.serveCustomers();
     }
 }

@@ -3,7 +3,7 @@
  */
 public enum Ingredient {
 
-    // The ingredients
+    // The valid ingredients
     COFFEE_BEANS("Coffee Beans"),
     WATER("Water"),
     SUGAR("Sugar");

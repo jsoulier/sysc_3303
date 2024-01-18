@@ -19,27 +19,25 @@ Student Number: 101189819
 === Files ===
 
 src/Barista.java
- - Java file containing the class definition of a Barista
- - Required for the application
+- Java file containing the implementation of the barista
+
+src/Counter.java
+- Java file containing the implementation of the counter
 
 src/Ingredient.java
- - Java file containing the enum definition of an Ingredient
- - Required for the application
+- Java file containing the enum of valid ingredients
 
 src/Main.java
- - Java file containing the class definition of Main
- - Required for the entrypoint of the application
+- Java file containing the entrypoint of the application
 
 src/Supplier.java
- - Java file containing the class definition of a Supplier
- - Required for the application
+- Java file containing the implementation of the supplier
 
 class_diagram.pdf
- - UML class diagram for the design of the application
+- The class diagram of the application
 
 sequence_diagram.pdf
- - UML sequence diagram for the design of the application
- - Displays a sample interaction
+- The sequence diagram showing a sample interaction in the application
 
 README.txt
- - Information for the user of the application
+- Information about the application and relevant files

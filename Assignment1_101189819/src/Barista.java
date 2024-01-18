@@ -1,34 +1,29 @@
 /**
- * The barista thread.
+ * The barista runnable.
  */
-public class Barista extends Thread {
+public class Barista implements Runnable {
 
-    /** The shared supplier. */
-    private Supplier supplier = null;
+    /** The shared counter. */
+    private Counter counter = null;
 
     /** The infinite ingredient. */
     private Ingredient ingredient = null;
 
     /**
      * Create a new barista.
-     * @param supplier The shared supplier.
+     * @param counter The shared counter.
      * @param ingredient The infinite ingredient.
      */
-    Barista(Supplier supplier, Ingredient ingredient) {
-        super();
-
-        // Initialize instance variables
-        this.supplier = supplier;
+    Barista(Counter counter, Ingredient ingredient) {
+        this.counter = counter;
         this.ingredient = ingredient;
     }
 
     /**
-     * The thread entry point.
-     * 
-     * Gets ingredients until the maximum number of cups has been reached.
+     * Start the barista thread and make coffees until the counter says stop.
      */
     @Override
     public void run() {
-        while (supplier.getIngredients(ingredient)) {}
+        while (counter.makeCoffee(ingredient)) {}
     }
 }
