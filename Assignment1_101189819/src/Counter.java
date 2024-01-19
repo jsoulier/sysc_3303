@@ -38,14 +38,14 @@ public class Counter {
     public synchronized boolean makeCoffee(Ingredient ingredient) {
 
         // If there are still cups to be made and there are no ingredients, wait
-        while (!hasIngredients && cups < maxCups) {
+        while (!hasIngredients && !finished()) {
             try {
                 wait();
             } catch (InterruptedException e) {}
         }
 
         // If there are no cups to be made, return false
-        if (cups >= maxCups) {
+        if (finished()) {
             return false;
         }
 
@@ -87,14 +87,14 @@ public class Counter {
     public synchronized boolean putIngredients(Ingredient[] ingredients) {
 
         // If there are still cups to be made and there are ingredients, wait
-        while (hasIngredients && cups < maxCups) {
+        while (hasIngredients && !finished()) {
             try {
                 wait();
             } catch (InterruptedException e) {}
         }
 
         // If there are no more cups to be made, return false
-        if (cups >= maxCups) {
+        if (finished()) {
             return false;
         }
 
@@ -115,6 +115,14 @@ public class Counter {
         notifyAll();
 
         return true;
+    }
+
+    /**
+     * Check if there are no more cups to be made.
+     * @return True if there are no more cups to be made.
+     */
+    private boolean finished() {
+        return cups >= maxCups;
     }
 
     /**
