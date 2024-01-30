@@ -1,6 +1,7 @@
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * TODO
@@ -32,16 +33,16 @@ public class ClientPacket {
      * TODO
      * @param bytes
      * @param start
-     * @throws RuntimeException
      * @return
      */
     public static String readString(byte[] bytes, int start) {
-        for (int end = start; end < bytes.length; end++) {
-            if (bytes[end] == 0) {
-                return new String(bytes, start, end);
+        int i = 0;
+        for (; start + i < bytes.length; i++) {
+            if (bytes[start + i] == 0) {
+                break;
             }
         }
-        throw new RuntimeException();
+        return new String(bytes, start, i);
     }
 
     /**
@@ -114,15 +115,14 @@ public class ClientPacket {
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder();
-        string.append("Request: ");
+        string.append("Request=");
         string.append(request.toString());
-        string.append("\n");
-        string.append("FileName: ");
+        string.append(", ");
+        string.append("FileName=");
         string.append(fileName);
-        string.append("\n");
-        string.append("Mode: ");
+        string.append(", ");
+        string.append("Mode=");
         string.append(mode.toString());
-        string.append("\n");
         return string.toString();
     }
 }

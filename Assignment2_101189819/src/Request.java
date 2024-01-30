@@ -3,23 +3,28 @@
  */
 public enum Request {
     /** TODO */
-    INVALID ((byte) 0),
+    INVALID ((byte) 0, null),
 
     /** TODO */
-    READ    ((byte) 1),
+    READ    ((byte) 1, new byte[] { 0, 3, 0, 1 }),
 
     /** TODO */
-    WRITE   ((byte) 2);
+    WRITE   ((byte) 2, new byte[] { 0, 4, 0, 0 });
 
     /** TODO */
     private final byte value;
 
+    /** TODO */
+    private final byte[] response;
+
     /**
      * TODO
      * @param value
+     * @param response
      */
-    Request(byte value) {
+    Request(byte value, byte[] response) {
         this.value = value;
+        this.response = response;
     }
 
     /**
@@ -42,6 +47,14 @@ public enum Request {
             }
         }
         throw new RuntimeException();
+    }
+
+    /**
+     * TODO
+     * @return
+     */
+    public byte[] getResponse() {
+        return this.response;
     }
 
     /**

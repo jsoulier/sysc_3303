@@ -23,7 +23,7 @@ public enum Mode {
      */
     public static Mode fromString(String value) {
         for (Mode mode : Mode.values()) {
-            if (mode.toString() == value) {
+            if (value.equals(mode.toString())) {
                 return mode;
             }
         }
