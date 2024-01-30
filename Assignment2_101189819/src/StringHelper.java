@@ -1,14 +1,14 @@
 import java.net.DatagramPacket;
 
 /**
- * TODO
+ * Helper for string conversions.
  */
 public class StringHelper {
     
     /**
-     * TODO
-     * @param datagram
-     * @return
+     * Convert a datagram packet to a string.
+     * @param datagram The datagram packet.
+     * @return The string.
      */
     static String toString(DatagramPacket datagram) {
         StringBuilder string = new StringBuilder();
@@ -27,9 +27,9 @@ public class StringHelper {
     }
 
     /**
-     * TODO
-     * @param bytes
-     * @return
+     * Convert a byte array to a string.
+     * @param bytes The byte array.
+     * @return The string.
      */
     static String toString(byte[] bytes) {
         StringBuilder string = new StringBuilder();

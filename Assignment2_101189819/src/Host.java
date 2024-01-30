@@ -4,27 +4,27 @@ import java.net.DatagramSocket;
 import java.net.SocketException;
 
 /**
- * TODO
+ * Represents the host.
  */
 public class Host {
 
-    /** TODO */
+    /** Socket for receiving from client. */
     private DatagramSocket receiveSocket;
 
-    /** TODO */
+    /** Socket for sending and receiving to and from client and server. */
     private DatagramSocket sendReceiveSocket;
 
-    /** TODO */
+    /** Datagram for sending and receiving to and from client. */
     private DatagramPacket clientDatagram;
 
-    /** TODO */
+    /** Datagram for sending receiving to and from server. */
     private DatagramPacket serverDatagram;
 
-    /** TODO */
+    /** Packet for receiving from client and sending to server. */
     private ClientPacket packet;
 
     /**
-     * 
+     * Create new host on specific port.
      */
     public Host() {
         try {
@@ -37,59 +37,81 @@ public class Host {
     }
 
     /**
-     * TODO
+     * Send a packet to the client.
      */
     public void sendClient() {
+
+        // Format the packet
         byte[] bytes = serverDatagram.getData();
         clientDatagram = new DatagramPacket(bytes, bytes.length, clientDatagram.getAddress(), clientDatagram.getPort());
+
+        // Print the packet
         System.out.print("Sending(Client): ");
         System.out.print(StringHelper.toString(clientDatagram));
         System.out.print(", ");
         System.out.print("Data(String)=");
         System.out.print(StringHelper.toString(clientDatagram.getData()));
         System.out.println();
+
+        // Send the packet
         try {
             sendReceiveSocket.send(clientDatagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
         System.out.println("Sent(Client)");
     }
 
     /**
-     * TODO
+     * Send a packet to the server.
      */
     public void sendServer() {
+
+        // Format the packet
         serverDatagram = ClientPacket.create(packet, Config.SERVER_IP, Config.SERVER_PORT);
+
+        // Print the packet
         System.out.print("Sending(Server): ");
         System.out.print(StringHelper.toString(serverDatagram));
         System.out.print(", ");
         System.out.print(packet.toString());
         System.out.println();
+        
+        // Send the packet
         try {
             sendReceiveSocket.send(serverDatagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
         System.out.println("Sent(Server)");
     }
 
     /**
-     * TODO
+     * Receive a packet from the client.
      */
     public void receiveClient() {
-        System.out.println("Receiving(Client)");
+
+        // Create the packet
         byte[] bytes = new byte[Config.CLIENT_PACKET_LENGTH];
         clientDatagram = new DatagramPacket(bytes, bytes.length);
+
+        System.out.println("Receiving(Client)");
+
+        // Receive the packet
         try {
             receiveSocket.receive(clientDatagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
         packet = ClientPacket.create(clientDatagram);
+        
+        // Print the packet
         System.out.print("Received(Client): ");
         System.out.print(StringHelper.toString(clientDatagram));
         System.out.print(", ");
@@ -98,18 +120,25 @@ public class Host {
     }
 
     /**
-     * TODO
+     * Receive a packet from the server.
      */
     public void receiveServer() {
-        System.out.println("Receiving(Server)");
+
+        // Create the packet
         byte[] bytes = new byte[Config.SERVER_PACKET_LENGTH];
         serverDatagram = new DatagramPacket(bytes, bytes.length);
+
+        System.out.println("Receiving(Server)");
+
+        // Receive the packet
         try {
             sendReceiveSocket.receive(serverDatagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
+        // Print the packet
         System.out.print("Received(Server): ");
         System.out.print(StringHelper.toString(serverDatagram));
         System.out.print(", ");
@@ -127,11 +156,14 @@ public class Host {
 
         // Loop forever
         while (true) {
+
+            // Forward to server
             host.receiveClient();
             host.sendServer();
 
             System.out.println();
 
+            // Forward to client
             host.receiveServer();
             host.sendClient();
 

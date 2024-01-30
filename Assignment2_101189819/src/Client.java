@@ -12,7 +12,7 @@ public class Client {
     private DatagramSocket socket;
 
     /**
-     * Create a new client on unspecified port.
+     * Create a new client on an unspecified port.
      */
     public Client() {
         try {
@@ -111,7 +111,6 @@ public class Client {
             }
 
             client.receive();
-
             System.out.println();
         }
 

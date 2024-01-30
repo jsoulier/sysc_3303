@@ -5,21 +5,21 @@ import java.net.SocketException;
 import java.nio.charset.StandardCharsets;
 
 /**
- * TODO
+ * Represents the server.
  */
 public class Server {
 
-    /** TODO */
+    /** Socket for receiving. */
     private DatagramSocket socket;
 
-    /** TODO */
+    /** Datagram for sending and receiving. */
     private DatagramPacket datagram;
 
-    /** TODO */
+    /** Packet for receiving. */
     private ClientPacket packet;
 
     /**
-     * TODO
+     * Create a new server on a specific port.
      */
     public Server() {
         try {
@@ -31,7 +31,7 @@ public class Server {
     }
 
     /**
-     * TODO
+     * Send a packet to the client.
      */
     public void send() {
 
@@ -44,31 +44,43 @@ public class Server {
             throw new RuntimeException();
         }
 
+        // Format the packet
         byte[] bytes = packet.getRequest().getResponse();
         datagram = new DatagramPacket(bytes, bytes.length, datagram.getAddress(), datagram.getPort());
+
+        // Print the packet
         System.out.print("Sending: ");
         System.out.print(StringHelper.toString(datagram));
         System.out.print(", ");
         System.out.print("Data(String)=");
         System.out.print(StringHelper.toString(datagram.getData()));
         System.out.println();
+        
+        // Send the packet
         try {
             socket.send(datagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
-        System.out.println("Sent");
+
         socket.close();
+
+        System.out.println("Sent");
     }
 
     /**
-     * TODO
-     * @return
+     * Receive a packet from the client.
+     * @return If the packet was invalid.
      */
     public boolean receive() {
-        System.out.println("Receiving");
+
+        // Create the packet
         byte[] bytes = new byte[Config.CLIENT_PACKET_LENGTH];
+
+        System.out.println("Receiving");
+
+        // Receive the packet
         datagram = new DatagramPacket(bytes, bytes.length);
         try {
             socket.receive(datagram);
@@ -76,37 +88,43 @@ public class Server {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
         packet = ClientPacket.create(datagram);
+
+        // Print the packet
         System.out.print("Received: ");
         System.out.print(StringHelper.toString(datagram));
         System.out.print(", ");
         System.out.print(packet.toString());
         System.out.println();
+
+        // Check valid packet
         return packet.getRequest() != Request.INVALID;
     }
 
     /**
-     * TODO
+     * Close all sockets.
      */
     public void close() {
         socket.close();
     }
 
     /**
-     * TODO
-     * @param args
+     * Start the server.
+     * @param args Unused.
      */
     public static void main(String[] args) {
         Server server = new Server();
+
+        // Loop until invalid packet
         while (server.receive()) {
             server.send();
-
             System.out.println();
         }
+
+        // Close and throw exception
         server.close();
-
         System.out.println();
-
         throw new RuntimeException("Invalid Packet");
     }
 }

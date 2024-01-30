@@ -1,25 +1,25 @@
 /**
- * TODO
+ * Represents a mode.
  */
 public enum Mode {
-    /** TODO */
+    /** Represents netascii mode. */
     NETASCII,
 
-    /** TODO */
+    /** Represents octet mode. */
     OCTET;
 
     /**
-     * TODO
-     * @return
+     * Get the mode as a string in bytes.
+     * @return The mode as a string in bytes.
      */
     public byte[] getBytes() {
         return toString().getBytes();
     }
 
     /**
-     * TODO
-     * @param value
-     * @return
+     * Get the mode from a string.
+     * @param value The string.
+     * @return The matching mode.
      */
     public static Mode fromString(String value) {
         for (Mode mode : Mode.values()) {
@@ -31,8 +31,8 @@ public enum Mode {
     }
 
     /**
-     * TODO
-     * @return
+     * Get the mode as a string.
+     * @return The mode as a string.
      */
     @Override
     public String toString() {

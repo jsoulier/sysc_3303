@@ -1,26 +1,26 @@
 /**
- * TODO
+ * Represents a request.
  */
 public enum Request {
-    /** TODO */
+    /** Represents an invalid request. */
     INVALID ((byte) 0, null),
 
-    /** TODO */
+    /** Represents a read request. */
     READ    ((byte) 1, new byte[] { 0, 3, 0, 1 }),
 
-    /** TODO */
+    /** Represents a write request. */
     WRITE   ((byte) 2, new byte[] { 0, 4, 0, 0 });
 
-    /** TODO */
+    /** The byte representation. */
     private final byte value;
 
-    /** TODO */
+    /** The request response. */
     private final byte[] response;
 
     /**
-     * TODO
-     * @param value
-     * @param response
+     * Create a new request.
+     * @param value The byte representation.
+     * @param response The request response.
      */
     Request(byte value, byte[] response) {
         this.value = value;
@@ -28,17 +28,17 @@ public enum Request {
     }
 
     /**
-     * TODO
-     * @return
+     * Get the byte representation.
+     * @return The byte representation.
      */
     public byte toByte() {
         return value;
     }
 
     /**
-     * TODO
-     * @param value
-     * @return
+     * Create request from a byte representation.
+     * @param value The byte representation.
+     * @return The matching request.
      */
     public static Request fromByte(byte value) {
         for (Request request : Request.values()) {
@@ -50,16 +50,16 @@ public enum Request {
     }
 
     /**
-     * TODO
-     * @return
+     * Get the request response.
+     * @return The request response.
      */
     public byte[] getResponse() {
         return this.response;
     }
 
     /**
-     * TODO
-     * @return
+     * Get the request as a string.
+     * @return The request as a string.
      */
     @Override
     public String toString() {
