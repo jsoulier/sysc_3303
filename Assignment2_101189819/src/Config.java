@@ -21,9 +21,6 @@ public class Config {
     /** The port for the server the listen on. */
     public static final int SERVER_PORT = 69;
 
-    /** The client IP (localhost now). */
-    public static final InetAddress CLIENT_IP;
-
     /** The host IP (localhost now). */
     public static final InetAddress HOST_IP;
 
@@ -34,7 +31,6 @@ public class Config {
     static {
         try {
             InetAddress host = InetAddress.getLocalHost();
-            CLIENT_IP = host;
             HOST_IP = host;
             SERVER_IP = host;
         } catch (UnknownHostException e) {

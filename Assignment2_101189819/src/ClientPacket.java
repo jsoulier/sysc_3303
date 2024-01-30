@@ -1,7 +1,6 @@
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Wrapper for client to server datagram packets.
@@ -15,7 +14,7 @@ public class ClientPacket {
     private String fileName;
 
     /** The mode. */
-    private Mode mode;
+    private String mode;
 
     /**
      * Create a new client packet.
@@ -23,7 +22,7 @@ public class ClientPacket {
      * @param fileName The file name.
      * @param mode The mode.
      */
-    public ClientPacket(Request request, String fileName, Mode mode) {
+    public ClientPacket(Request request, String fileName, String mode) {
         this.request = request;
         this.fileName = fileName;
         this.mode = mode;
@@ -71,7 +70,7 @@ public class ClientPacket {
     public static ClientPacket create(DatagramPacket datagram) {
         Request request = Request.fromByte(datagram.getData()[1]);
         String fileName = readString(datagram.getData(), 2);
-        Mode mode = Mode.fromString(readString(datagram.getData(), fileName.getBytes().length + 3));
+        String mode = readString(datagram.getData(), fileName.getBytes().length + 3);
         return new ClientPacket(request, fileName, mode);
     }
 
@@ -95,7 +94,7 @@ public class ClientPacket {
      * Get the mode.
      * @return The mode.
      */
-    public Mode getMode() {
+    public String getMode() {
         return mode;
     }
 

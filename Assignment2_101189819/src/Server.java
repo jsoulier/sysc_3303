@@ -2,7 +2,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
-import java.nio.charset.StandardCharsets;
 
 /**
  * Represents the server.
@@ -31,18 +30,9 @@ public class Server {
     }
 
     /**
-     * Send a packet to the client.
+     * Send a packet to the client/host.
      */
     public void send() {
-
-        // Create a new socket for the response
-        DatagramSocket socket;
-        try {
-            socket = new DatagramSocket();
-        } catch (SocketException e) {
-            e.printStackTrace();
-            throw new RuntimeException();
-        }
 
         // Format the packet
         byte[] bytes = packet.getRequest().getResponse();
@@ -55,25 +45,33 @@ public class Server {
         System.out.print("Data(String)=");
         System.out.print(StringHelper.toString(datagram.getData()));
         System.out.println();
-        
+
+        // Create a new socket for the response
+        DatagramSocket socket;
+        try {
+            socket = new DatagramSocket();
+        } catch (SocketException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+
         // Send the packet
         try {
             socket.send(datagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
+        } finally {
+            socket.close();
         }
-
-        socket.close();
 
         System.out.println("Sent");
     }
 
     /**
-     * Receive a packet from the client.
-     * @return If the packet was invalid.
+     * Receive a packet from the client/host.
      */
-    public boolean receive() {
+    public void receive() {
 
         // Create the packet
         byte[] bytes = new byte[Config.CLIENT_PACKET_LENGTH];
@@ -99,14 +97,9 @@ public class Server {
         System.out.println();
 
         // Check valid packet
-        return packet.getRequest() != Request.INVALID;
-    }
-
-    /**
-     * Close all sockets.
-     */
-    public void close() {
-        socket.close();
+        if (packet.getRequest() == Request.INVALID) {
+            throw new RuntimeException();
+        }
     }
 
     /**
@@ -116,15 +109,13 @@ public class Server {
     public static void main(String[] args) {
         Server server = new Server();
 
-        // Loop until invalid packet
-        while (server.receive()) {
+        // Loop forever
+        while (true) {
+
+            // Response to host
+            server.receive();
             server.send();
             System.out.println();
         }
-
-        // Close and throw exception
-        server.close();
-        System.out.println();
-        throw new RuntimeException("Invalid Packet");
     }
 }

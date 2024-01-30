@@ -24,12 +24,12 @@ public class Client {
     }
 
     /**
-     * Send a packet to the server.
+     * Send a packet to the server/host.
      * @param request The server request.
      * @param fileName The file name.
      * @param mode The mode.
      */
-    public void send(Request request, String fileName, Mode mode) {
+    public void send(Request request, String fileName, String mode) {
 
         // Format the packet
         ClientPacket packet = new ClientPacket(request, fileName, mode);
@@ -54,7 +54,7 @@ public class Client {
     }
 
     /**
-     * Receive a packet from the server.
+     * Receive a packet from the server/host.
      */
     public void receive() {
 
@@ -105,18 +105,17 @@ public class Client {
 
             // Alternative between reads and writes
             if (i % 2 == 0) {
-                client.send(Request.READ, string.toString(), Mode.NETASCII);
+                client.send(Request.READ, string.toString(), "netascii");
             } else {
-                client.send(Request.WRITE, string.toString(), Mode.OCTET);
+                client.send(Request.WRITE, string.toString(), "octet");
             }
 
             client.receive();
             System.out.println();
         }
 
-        // Send the invalid packet
-        client.send(Request.INVALID, "invalid", Mode.NETASCII);
-
+        // Close server and socket
+        client.send(Request.INVALID, "invalid", "netascii");
         client.close();
     }
 }

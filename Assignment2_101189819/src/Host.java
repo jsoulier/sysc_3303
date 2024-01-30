@@ -11,7 +11,7 @@ public class Host {
     /** Socket for receiving from client. */
     private DatagramSocket receiveSocket;
 
-    /** Socket for sending and receiving to and from client and server. */
+    /** Socket for sending and receiving to and from server. */
     private DatagramSocket sendReceiveSocket;
 
     /** Datagram for sending and receiving to and from client. */
@@ -53,12 +53,23 @@ public class Host {
         System.out.print(StringHelper.toString(clientDatagram.getData()));
         System.out.println();
 
+       // Create a new socket for the response
+        DatagramSocket sendSocket;
+        try {
+            sendSocket = new DatagramSocket();
+        } catch (SocketException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+
         // Send the packet
         try {
-            sendReceiveSocket.send(clientDatagram);
+            sendSocket.send(clientDatagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
+        } finally {
+            sendSocket.close();
         }
 
         System.out.println("Sent(Client)");
@@ -78,7 +89,7 @@ public class Host {
         System.out.print(", ");
         System.out.print(packet.toString());
         System.out.println();
-        
+
         // Send the packet
         try {
             sendReceiveSocket.send(serverDatagram);
@@ -160,13 +171,11 @@ public class Host {
             // Forward to server
             host.receiveClient();
             host.sendServer();
-
             System.out.println();
 
             // Forward to client
             host.receiveServer();
             host.sendClient();
-
             System.out.println();
         }
     }

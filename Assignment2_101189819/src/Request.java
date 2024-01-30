@@ -3,13 +3,13 @@
  */
 public enum Request {
     /** Represents an invalid request. */
-    INVALID ((byte) 0, null),
+    INVALID((byte) 0, null),
 
     /** Represents a read request. */
-    READ    ((byte) 1, new byte[] { 0, 3, 0, 1 }),
+    READ((byte) 1, new byte[] { 0, 3, 0, 1 }),
 
     /** Represents a write request. */
-    WRITE   ((byte) 2, new byte[] { 0, 4, 0, 0 });
+    WRITE((byte) 2, new byte[] { 0, 4, 0, 0 });
 
     /** The byte representation. */
     private final byte value;
