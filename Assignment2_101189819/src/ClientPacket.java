@@ -4,24 +4,24 @@ import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
 /**
- * TODO
+ * Wrapper for client to server datagram packets.
  */
 public class ClientPacket {
 
-    /** TODO */
+    /** The server request. */
     private Request request;
 
-    /** TODO */
+    /** The file name. */
     private String fileName;
 
-    /** TODO */
+    /** The mode. */
     private Mode mode;
 
     /**
-     * TODO
-     * @param request
-     * @param fileName
-     * @param mode
+     * Create a new client packet.
+     * @param request The server request.
+     * @param fileName The file name.
+     * @param mode The mode.
      */
     public ClientPacket(Request request, String fileName, Mode mode) {
         this.request = request;
@@ -30,10 +30,10 @@ public class ClientPacket {
     }
 
     /**
-     * TODO
-     * @param bytes
-     * @param start
-     * @return
+     * Read a string from a byte array.
+     * @param bytes The byte array.
+     * @param start The starting index.
+     * @return The string.
      */
     public static String readString(byte[] bytes, int start) {
         int i = 0;
@@ -46,11 +46,11 @@ public class ClientPacket {
     }
 
     /**
-     * TODO
-     * @param packet
-     * @param address
-     * @param port
-     * @return
+     * Create a datagram packet from a client packet, address, and port.
+     * @param packet The client packet.
+     * @param address The address.
+     * @param port The port.
+     * @return The datagram packet.
      */
     public static DatagramPacket create(ClientPacket packet, InetAddress address, int port) {
         ByteBuffer buffer = ByteBuffer.allocate(packet.getLength());
@@ -64,9 +64,9 @@ public class ClientPacket {
     }
 
     /**
-     * TODO
-     * @param packet
-     * @return
+     * Create a client packet from a datagram packet.
+     * @param packet The datagram packet.
+     * @return The client packet.
      */
     public static ClientPacket create(DatagramPacket datagram) {
         Request request = Request.fromByte(datagram.getData()[1]);
@@ -76,32 +76,32 @@ public class ClientPacket {
     }
 
     /**
-     * TODO
-     * @return
+     * Get the server request.
+     * @return The server request.
      */
     public Request getRequest() {
         return request;
     }
 
     /**
-     * TODO
-     * @return
+     * Get the file name.
+     * @return The file name.
      */
     public String getFileName() {
         return fileName;
     }
 
     /**
-     * TODO
-     * @return
+     * Get the mode.
+     * @return The mode.
      */
     public Mode getMode() {
         return mode;
     }
 
     /**
-     * TODO
-     * @return
+     * Get the packet length.
+     * @return The packet length.
      */
     public int getLength() {
         int fileNameSize = fileName.getBytes().length;
@@ -110,7 +110,8 @@ public class ClientPacket {
     }
 
     /**
-     * TODO
+     * Get the client packet as a string.
+     * @return The client packet as a string.
      */
     @Override
     public String toString() {
