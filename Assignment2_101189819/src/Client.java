@@ -26,23 +26,30 @@ public class Client {
     /**
      * Send a packet to the server.
      * @param request The server request.
-     * @param fileName The filename.
+     * @param fileName The file name.
      * @param mode The mode.
      */
     public void send(Request request, String fileName, Mode mode) {
+
+        // Format the packet
         ClientPacket packet = new ClientPacket(request, fileName, mode);
         DatagramPacket datagram = ClientPacket.create(packet, Config.HOST_IP, Config.HOST_PORT);
+
+        // Print the packet
         System.out.print("Sending: ");
         System.out.print(StringHelper.toString(datagram));
         System.out.print(", ");
         System.out.print(packet.toString());
         System.out.println();
+
+        // Send the packet
         try {
             socket.send(datagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
         System.out.println("Sent");
     }
 
@@ -50,17 +57,27 @@ public class Client {
      * Receive a packet from the server.
      */
     public void receive() {
-        byte[] bytes = new byte[Config.PACKET_LENGTH];
+
+        // Create the packet
+        byte[] bytes = new byte[Config.SERVER_PACKET_LENGTH];
         DatagramPacket datagram = new DatagramPacket(bytes, bytes.length);
+
         System.out.println("Receiving");
+
+        // Receive the packet
         try {
             socket.receive(datagram);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException();
         }
+
+        // Print the packet
         System.out.print("Received: ");
         System.out.print(StringHelper.toString(datagram));
+        System.out.print(", ");
+        System.out.print("Data(String)=");
+        System.out.print(StringHelper.toString(datagram.getData()));
         System.out.println();
     }
 
@@ -78,8 +95,28 @@ public class Client {
     public static void main(String[] args) {
         Client client = new Client();
 
-        client.send(Request.INVALID, "file", Mode.NETASCII);
-        client.receive();
+        for (int i = 0; i < Config.PACKETS - 1; i++) {
+
+            // Format the file name
+            StringBuilder string = new StringBuilder();
+            string.append("file");
+            string.append(i);
+            string.append(".txt");
+
+            // Alternative between reads and writes
+            if (i % 2 == 0) {
+                client.send(Request.READ, string.toString(), Mode.NETASCII);
+            } else {
+                client.send(Request.WRITE, string.toString(), Mode.OCTET);
+            }
+
+            client.receive();
+
+            System.out.println();
+        }
+
+        // Send the invalid packet
+        client.send(Request.INVALID, "invalid", Mode.NETASCII);
 
         client.close();
     }

@@ -10,7 +10,10 @@ public class Config {
     public static final int PACKETS = 11;
 
     /** TODO */
-    public static final int PACKET_LENGTH = 1024;
+    public static final int CLIENT_PACKET_LENGTH = 1024;
+
+    /** TODO */
+    public static final int SERVER_PACKET_LENGTH = 4;
 
     /** TODO */
     public static final int HOST_PORT = 23;

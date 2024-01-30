@@ -68,7 +68,7 @@ public class Server {
      */
     public boolean receive() {
         System.out.println("Receiving");
-        byte[] bytes = new byte[Config.PACKET_LENGTH];
+        byte[] bytes = new byte[Config.CLIENT_PACKET_LENGTH];
         datagram = new DatagramPacket(bytes, bytes.length);
         try {
             socket.receive(datagram);
@@ -101,8 +101,12 @@ public class Server {
         while (server.receive()) {
             server.send();
 
+            System.out.println();
         }
         server.close();
-        throw new RuntimeException();
+
+        System.out.println();
+
+        throw new RuntimeException("Invalid Packet");
     }
 }

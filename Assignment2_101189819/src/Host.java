@@ -40,7 +40,21 @@ public class Host {
      * TODO
      */
     public void sendClient() {
-
+        byte[] bytes = serverDatagram.getData();
+        clientDatagram = new DatagramPacket(bytes, bytes.length, clientDatagram.getAddress(), clientDatagram.getPort());
+        System.out.print("Sending(Client): ");
+        System.out.print(StringHelper.toString(clientDatagram));
+        System.out.print(", ");
+        System.out.print("Data(String)=");
+        System.out.print(StringHelper.toString(clientDatagram.getData()));
+        System.out.println();
+        try {
+            sendReceiveSocket.send(clientDatagram);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+        System.out.println("Sent(Client)");
     }
 
     /**
@@ -67,7 +81,7 @@ public class Host {
      */
     public void receiveClient() {
         System.out.println("Receiving(Client)");
-        byte[] bytes = new byte[Config.PACKET_LENGTH];
+        byte[] bytes = new byte[Config.CLIENT_PACKET_LENGTH];
         clientDatagram = new DatagramPacket(bytes, bytes.length);
         try {
             receiveSocket.receive(clientDatagram);
@@ -87,20 +101,41 @@ public class Host {
      * TODO
      */
     public void receiveServer() {
-
+        System.out.println("Receiving(Server)");
+        byte[] bytes = new byte[Config.SERVER_PACKET_LENGTH];
+        serverDatagram = new DatagramPacket(bytes, bytes.length);
+        try {
+            sendReceiveSocket.receive(serverDatagram);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+        System.out.print("Received(Server): ");
+        System.out.print(StringHelper.toString(serverDatagram));
+        System.out.print(", ");
+        System.out.print("Data(String)=");
+        System.out.print(StringHelper.toString(serverDatagram.getData()));
+        System.out.println();
     }
 
     /**
-     * TODO
-     * @param args
+     * Start the host.
+     * @param args Unused.
      */
     public static void main(String[] args) {
-
         Host host = new Host();
 
-        host.receiveClient();
-        host.sendServer();
-        host.receiveServer();
-        host.sendClient();
+        // Loop forever
+        while (true) {
+            host.receiveClient();
+            host.sendServer();
+
+            System.out.println();
+
+            host.receiveServer();
+            host.sendClient();
+
+            System.out.println();
+        }
     }
 }
