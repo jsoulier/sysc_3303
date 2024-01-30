@@ -6,10 +6,5 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library" scope="TEST">
-    </orderEntry>
-    <orderEntry type="module-library">
-    </orderEntry>
   </component>
 </module>

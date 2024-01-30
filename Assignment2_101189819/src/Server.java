@@ -115,6 +115,7 @@ public class Server {
             // Response to host
             server.receive();
             server.send();
+
             System.out.println();
         }
     }

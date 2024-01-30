@@ -111,6 +111,7 @@ public class Client {
             }
 
             client.receive();
+
             System.out.println();
         }
 

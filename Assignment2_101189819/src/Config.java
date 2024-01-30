@@ -27,7 +27,7 @@ public class Config {
     /** The server IP (localhost now). */
     public static final InetAddress SERVER_IP;
 
-    // Assign the client, host, and server addresses
+    // Assign the client, host, and server IPs
     static {
         try {
             InetAddress host = InetAddress.getLocalHost();

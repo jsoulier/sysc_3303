@@ -171,11 +171,11 @@ public class Host {
             // Forward to server
             host.receiveClient();
             host.sendServer();
-            System.out.println();
 
             // Forward to client
             host.receiveServer();
             host.sendClient();
+
             System.out.println();
         }
     }
