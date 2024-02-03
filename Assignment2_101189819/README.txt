@@ -55,8 +55,8 @@ PDFs:
   sequence_diagram
    - Interaction between client, host, and server
   client_class_diagram
-   - Client class diagram
+   - Class diagram for client
   host_class_diagram
-   - Host class diagram
+   - Class diagram for host
   server_class_diagram
-   - Server class diagram
+   - Class diagram for server
