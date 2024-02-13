@@ -1,5 +1,12 @@
+/**
+ * The sample/test code for the context.
+ */
 public class Sample {
 
+    /**
+     * Sleep the caller thread by seconds.
+     * @param seconds The seconds to sleep.
+     */
     private static void sleep(int seconds) {
         try {
             Thread.sleep(seconds * 1000);
@@ -8,6 +15,10 @@ public class Sample {
         }
     }
 
+    /**
+     * The entrypoint of the sample.
+     * @param args Unused
+     */
     public static void main(String[] args) {
         Context context = new Context();
 

@@ -1,23 +1,78 @@
+/**
+ * The generic state for all the states to implement.
+ */
 interface State {
-    public void timeout(Context context);
-    public void pedestrianWaiting(Context context);
+
+    /**
+     * Get the first state.
+     * @param context The context to set the state.
+     */
+    public static void start(Context context) {
+        context.setState(new GreenState());
+    }
+
+    /**
+     * Print the state information.
+     */
     public void print();
+
+    /**
+     * Sleep the caller thread by a time depending on the state.
+     */
+    public void sleep();
+
+    /**
+     * Handle TIMEOUT event.
+     * @param context The context to set the state.
+     */
+    public void handleTimeout(Context context);
+
+    /**
+     * Handle PEDESTRIAN_WAITING event.
+     * @param context The context to set the state.
+     */
+    public void handlePedestrianWaiting(Context context);
 }
 
+/**
+ * The uninterruptible green light state.
+ */
 class GreenState implements State {
 
+    /** Flag for if a pedestrian is waiting. */
     private boolean isPedestrianWaiting;
 
+    /**
+     * Create a new green light state.
+     */
     public GreenState() {
         isPedestrianWaiting = false;
     }
 
-    public void timeout(Context context) {
+    /**
+     * Print the state information.
+     */
+    public void print() {
+        Action.DONT_WALK.print();
+        Action.GREEN.print();
+    }
+
+    /**
+     * Sleep the caller thread.
+     */
+    public void sleep() {
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Handle TIMEOUT event.
+     * @param context The context to set the state.
+     */
+    public void handleTimeout(Context context) {
         if (isPedestrianWaiting) {
             context.setState(new YellowState());
         } else {
@@ -25,81 +80,161 @@ class GreenState implements State {
         }
     }
 
-    public void pedestrianWaiting(Context context) {
+    /**
+     * Handle PEDESTRIAN_WAITING event.
+     * @param context The context to set the state.
+     */
+    public void handlePedestrianWaiting(Context context) {
         isPedestrianWaiting = true;
     }
-
-    public void print() {
-        Action.DONT_WALK.print();
-        Action.GREEN.print();
-    }
 }
 
+/**
+ * The interruptible green light state.
+ */
 class GreenIntState implements State {
 
-    public void timeout(Context context) {
-
-    }
-
-    public void pedestrianWaiting(Context context) {
-        context.setState(new YellowState());
-    }
-
+    /**
+     * Print the state information.
+     */
     public void print() {
 
     }
+
+    /**
+     * Sleep the caller thread.
+     */
+    public void sleep() {
+
+    }
+
+    /**
+     * Handle TIMEOUT event.
+     * @param context The context to set the state.
+     */
+    public void handleTimeout(Context context) {
+
+    }
+
+    /**
+     * Handle PEDESTRIAN_WAITING event.
+     * @param context The context to set the state.
+     */
+    public void handlePedestrianWaiting(Context context) {
+        context.setState(new YellowState());
+    }
 }
 
+/**
+ * The yellow light state.
+ */
 class YellowState implements State {
 
-    public void timeout(Context context) {
+    /**
+     * Print the state information.
+     */
+    public void print() {
+        Action.YELLOW.print();
+    }
+
+    /**
+     * Sleep the caller thread.
+     */
+    public void sleep() {
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Handle TIMEOUT event.
+     * @param context The context to set the state.
+     */
+    public void handleTimeout(Context context) {
         context.setState(new WalkState());
     }
 
-    public void pedestrianWaiting(Context context) {
+    /**
+     * Handle PEDESTRIAN_WAITING event.
+     * @param context The context to set the state.
+     */
+    public void handlePedestrianWaiting(Context context) {
     
-    }
-
-    public void print() {
-        Action.YELLOW.print();
     }
 }
 
+/**
+ * The walk light state.
+ */
 class WalkState implements State {
 
-    public void timeout(Context context) {
+    /**
+     * Print the state information.
+     */
+    public void print() {
+        Action.RED.print();
+        Action.WALK.print();
+    }
+
+    /**
+     * Sleep the caller thread.
+     */
+    public void sleep() {
         try {
             Thread.sleep(15000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Handle TIMEOUT event.
+     * @param context The context to set the state.
+     */
+    public void handleTimeout(Context context) {
         context.setState(new FlashState());
     }
 
-    public void pedestrianWaiting(Context context) {
+    /**
+     * Handle PEDESTRIAN_WAITING event.
+     * @param context The context to set the state.
+     */
+    public void handlePedestrianWaiting(Context context) {
 
-    }
-
-    public void print() {
-        Action.RED.print();
-        Action.WALK.print();
     }
 }
 
+/**
+ * The flashing light state.
+ */
 class FlashState implements State {
-    private int pedestrianFlashCtr;
+
+    /** The maximum number of flashes. */
     private static final int pedestrianFlashCtrMax = 7;
 
+    /** The remaining number of flashes. */
+    private int pedestrianFlashCtr;
+
+    /**
+     * Create a new flashing light state.
+     */
     public FlashState() {
         pedestrianFlashCtr = pedestrianFlashCtrMax;
     }
 
-    public void timeout(Context context) {
+    /**
+     * Print the state information.
+     */
+    public void print() {
+
+    }
+
+    /**
+     * Sleep the caller thread.
+     */
+    public void sleep() {
         while (pedestrianFlashCtr > 0) {
             if ((pedestrianFlashCtr & 1) == 0) {
                 Action.DONT_WALK.print();
@@ -113,14 +248,21 @@ class FlashState implements State {
             }
             pedestrianFlashCtr--;
         }
+    }
+
+    /**
+     * Handle TIMEOUT event.
+     * @param context The context to set the state.
+     */
+    public void handleTimeout(Context context) {
         context.setState(new GreenState());
     }
 
-    public void pedestrianWaiting(Context context) {
-
-    }
-
-    public void print() {
+    /**
+     * Handle PEDESTRIAN_WAITING event.
+     * @param context The context to set the state.
+     */
+    public void handlePedestrianWaiting(Context context) {
 
     }
 }
