@@ -21,9 +21,21 @@ src/Context.java: Java file containing the context for the states
 src/State.java: Java file containing the states
 src/Sample.java: Java file containing a sample of how to use the context
 
-=== Error ===
+=== Errors ===
 
-If pedestrianFlashCtr is 0, both of the following guards are triggered:
+1.
+
+When pedestriansFlash is entered, pedestriansFlash is set to 7. When a TIMEOUT occurs,
+pedestriansFlash is exited and pedestrianFlashCtr is decremented. If pedestrianFlashCtr
+is not equal to 0, pedestriansFlash is entered again.
+
+Since pedestrianFlashCtr is set to 7 whenever pedestriansFlash is entered, pedestrianFlashCtr
+is forever reset to 7 creating an infinite loop. To fix, an intermediary state can
+be created before pedestriansFlash that does the assignment of pedestrianFlashCtr to 7.
+
+2.
+
+If pedestrianFlashCtr is equal to 0, both of the following guards are triggered:
 [pedestrianFlashCtr == 0]
 [(pedestrianFlashCtr & 1) == 0]
 
