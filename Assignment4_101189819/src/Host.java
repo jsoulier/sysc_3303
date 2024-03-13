@@ -9,13 +9,27 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
+/**
+ * The host application.
+ */
 public class Host extends UnicastRemoteObject implements Runnable, HostInterface {
 
+    /** The client socket for sending/receiving. */
     private DatagramSocket clientSocket;
+
+    /** The server socket for sending/receiving. */
     private DatagramSocket serverSocket;
+
+    /** The datagram received from the client socket. */
     private DatagramPacket clientDatagram;
+
+    /** The datagram received from the server socket. */
     private DatagramPacket serverDatagram;
 
+    /**
+     * Create a new host.
+     * @throws RemoteException On RMI error.
+     */
     public Host() throws RemoteException {
         super();
         try {
@@ -29,16 +43,31 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
         serverDatagram = null;
     }
 
+    /**
+     * Get the client port.
+     * @returm The client port.
+     * @throws RemoteException On RMI error.
+     */
     @Override
     public int getClientPort() throws RemoteException {
         return clientSocket.getLocalPort();
     }
 
+    /**
+     * Get the server port.
+     * @returm The server port.
+     * @throws RemoteException On RMI error.
+     */
     @Override
     public int getServerPort() throws RemoteException {
         return serverSocket.getLocalPort();
     }
 
+    /**
+     * Get the host address.
+     * @return The host address.
+     * @throws RemoteException On RMI error.
+     */
     @Override
     public InetAddress getAddress() throws RemoteException {
         try {
@@ -49,9 +78,14 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
         }
     }
 
+    /**
+     * Perform an RPC.
+     * @param sendPacket The packet to send.
+     * @return The packet received.
+     * @throws RemoteException On RMI error.
+     */
     @Override
     public Packet rpc(Packet sendPacket) throws RemoteException {
-        System.out.println("Received[RPC]: " + sendPacket);
         DatagramSocket sendReceiveSocket;
         DatagramPacket receiveDatagram = new DatagramPacket(new byte[Config.PACKET_LENGTH], Config.PACKET_LENGTH);
         try {
@@ -72,6 +106,9 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
         return new Packet(receiveDatagram);
     }
 
+    /**
+     * Handle client RPC.
+     */
     public void handleClient() {
         System.out.println("Receiving[Client]");
         clientDatagram = new DatagramPacket(new byte[Config.PACKET_LENGTH], Config.PACKET_LENGTH);
@@ -100,6 +137,9 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
         System.out.println("Sent[Client]");
     }
 
+    /**
+     * Handle server RPC.
+     */
     public void handleServer() {
         System.out.println("Receiving[Server]");
         serverDatagram = new DatagramPacket(new byte[Config.PACKET_LENGTH], Config.PACKET_LENGTH);
@@ -128,6 +168,9 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
         System.out.println("Sent[Server]");
     }
 
+    /**
+     * The host thread entrypoint.
+     */
     @Override
     public void run() {
         while (true) {
@@ -135,9 +178,14 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
             handleServer();
             handleServer();
             handleClient();
+            System.out.println();
         }
     }
 
+    /**
+     * The host entrypoint.
+     * @param args Unused.
+     */
     public static void main(String[] args) {
         try {
             Host host = new Host();

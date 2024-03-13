@@ -7,5 +7,5 @@ public class Config {
     public static final int PACKETS = 11;
 
     /** The max length of a packet. */
-    public static final int PACKET_LENGTH = 1024;
+    public static final int PACKET_LENGTH = 24;
 }

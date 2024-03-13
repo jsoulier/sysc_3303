@@ -17,25 +17,43 @@ public class Packet implements Serializable {
     /** The mode. */
     private String mode = null;
 
+    /** The address. */
     private InetAddress address = null;
 
+    /** The port. */
     private int port = 0;
 
+    /**
+     * Create a new packet from a datagram.
+     * @param datagram The datagram.
+     */
     public Packet(DatagramPacket datagram) {
         request = Request.fromBytes(datagram.getData()[0], datagram.getData()[1]);
-        if (!request.isResponse()) {
-            fileName = readString(datagram.getData(), 2);
-            mode = readString(datagram.getData(), fileName.getBytes().length + 3);
-        }
         address = datagram.getAddress();
         port = datagram.getPort();
+        if (request == Request.INVALID || !request.isResponse()) {
+            return;
+        }
+        fileName = readString(datagram.getData(), 2);
+        mode = readString(datagram.getData(), fileName.getBytes().length + 3);
     }
 
+    /**
+     * Create a new packet from an address and port.
+     * @param address The address.
+     * @param port The port.
+     */
     public Packet(InetAddress address, int port) {
         this.address = address;
         this.port = port;
     }
 
+    /**
+     * Create a new packet from a request, address and port.
+     * @param request The request.
+     * @param address The address.
+     * @param port The port.
+     */
     public Packet(Request request, InetAddress address, int port) {
         this.request = request;
         this.address = address;
@@ -43,7 +61,7 @@ public class Packet implements Serializable {
     }
 
     /**
-     * Create a new client packet.
+     * Create a new packet.
      * @param request The server request.
      * @param fileName The file name.
      * @param mode The mode.
@@ -72,6 +90,10 @@ public class Packet implements Serializable {
         return new String(bytes, start, i);
     }
 
+    /**
+     * Create a datagram from a packet.
+     * @return The datagram.
+     */
     public DatagramPacket create() {
         ByteBuffer buffer = ByteBuffer.allocate(getLength());
         if (request != null) {
@@ -87,6 +109,10 @@ public class Packet implements Serializable {
         return new DatagramPacket(buffer.array(), buffer.capacity(), address, port);
     }
 
+    /**
+     * Get the response for the packet.
+     * @return The response for the packet.
+     */
     public Request getResponse() {
         return request.getResponse();
     }
@@ -138,6 +164,8 @@ public class Packet implements Serializable {
             string.append(port);
             string.append(", ");
         }
+        string.deleteCharAt(string.length() - 1);
+        string.deleteCharAt(string.length() - 1);
         return string.toString();
     }
 }
