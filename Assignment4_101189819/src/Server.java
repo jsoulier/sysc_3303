@@ -26,7 +26,7 @@ public class Server implements Runnable {
     /**
      * Receive a packet from the host.
      */
-    public void receive() {
+    private void receive() {
         System.out.println("Receiving");
         try {
             sendPacket = new Packet(host.getAddress(), host.getServerPort());
@@ -41,7 +41,7 @@ public class Server implements Runnable {
     /**
      * Send a packet to the host.
      */
-    public void send() {
+    private void send() {
         try {
             sendPacket = new Packet(receivePacket.getResponse(), host.getAddress(), host.getServerPort());
             System.out.println("Sending: " + sendPacket);

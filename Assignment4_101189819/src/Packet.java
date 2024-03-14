@@ -31,7 +31,7 @@ public class Packet implements Serializable {
         request = Request.fromBytes(datagram.getData()[0], datagram.getData()[1]);
         address = datagram.getAddress();
         port = datagram.getPort();
-        if (request == Request.INVALID || !request.isResponse()) {
+        if (request == Request.INVALID || request.isResponse()) {
             return;
         }
         fileName = readString(datagram.getData(), 2);

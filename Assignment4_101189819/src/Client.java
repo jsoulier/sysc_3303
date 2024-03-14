@@ -23,7 +23,7 @@ public class Client implements Runnable {
      * @param fileName The fileName in the packet.
      * @param mode The mode in the packet.
      */
-    public void send(Request request, String fileName, String mode) {
+    private void send(Request request, String fileName, String mode) {
         try {
             Packet sendPacket = new Packet(request, fileName, mode, host.getAddress(), host.getClientPort());
             System.out.println("Sending: " + sendPacket);
@@ -38,7 +38,7 @@ public class Client implements Runnable {
     /**
      * Receive a packet from the host.
      */
-    public void receive() {
+    private void receive() {
         Packet receivePacket;
         System.out.println("Receiving");
         try {

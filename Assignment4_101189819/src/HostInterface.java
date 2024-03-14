@@ -9,14 +9,14 @@ public interface HostInterface extends Remote {
 
     /**
      * Get the client port.
-     * @returm The client port.
+     * @return The client port.
      * @throws RemoteException On RMI error.
      */
     public int getClientPort() throws RemoteException;
 
     /**
      * Get the server port.
-     * @returm The server port.
+     * @return The server port.
      * @throws RemoteException On RMI error.
      */
     public int getServerPort() throws RemoteException;

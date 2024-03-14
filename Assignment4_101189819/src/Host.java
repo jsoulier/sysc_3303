@@ -45,7 +45,7 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
 
     /**
      * Get the client port.
-     * @returm The client port.
+     * @return The client port.
      * @throws RemoteException On RMI error.
      */
     @Override
@@ -55,7 +55,7 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
 
     /**
      * Get the server port.
-     * @returm The server port.
+     * @return The server port.
      * @throws RemoteException On RMI error.
      */
     @Override
@@ -109,7 +109,7 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
     /**
      * Handle client RPC.
      */
-    public void handleClient() {
+    private void handleClient() {
         System.out.println("Receiving[Client]");
         clientDatagram = new DatagramPacket(new byte[Config.PACKET_LENGTH], Config.PACKET_LENGTH);
         try {
@@ -140,7 +140,7 @@ public class Host extends UnicastRemoteObject implements Runnable, HostInterface
     /**
      * Handle server RPC.
      */
-    public void handleServer() {
+    private void handleServer() {
         System.out.println("Receiving[Server]");
         serverDatagram = new DatagramPacket(new byte[Config.PACKET_LENGTH], Config.PACKET_LENGTH);
         try {
